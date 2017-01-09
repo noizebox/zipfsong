@@ -42,7 +42,7 @@ void print_songs(const std::vector<Song>& song_list)
 {
     for (std::vector<Song>::const_iterator i = song_list.begin(); i < song_list.end(); ++i)
     {
-        std::cout << i->name() <<  std::endl;
+        std::cout << i->name() <<  '\n';
     }
     return;
 }
@@ -64,6 +64,6 @@ int main()
     print_songs(song_list);
     
     std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
-    std::cout << "Ex. time: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << " ms" << std::endl;
+    std::cout << "Ex. time: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << " ms\n";
     return 0;
 }
