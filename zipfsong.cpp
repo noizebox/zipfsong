@@ -38,11 +38,11 @@ void parse_songs(const int songs, std::vector<Song>& song_list)
     return;
 }
 
-void print_songs(const std::vector<Song>& song_list)
+void print_songs(const std::vector<Song>& song_list, int no_songs)
 {
-    for (std::vector<Song>::const_iterator i = song_list.begin(); i < song_list.end(); ++i)
+    for (int i = 0; i < no_songs ; ++i)
     {
-        std::cout << i->name() <<  '\n';
+        std::cout << song_list[i].name() <<  '\n';
     }
     return;
 }
@@ -61,7 +61,7 @@ int main()
     std::vector<Song> song_list;
     parse_songs(no_songs, song_list);
     stable_sort(song_list.begin(), song_list.end(), std::greater<Song>());
-    print_songs(song_list);
+    print_songs(song_list, no_outputs);
     
     std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
     std::cout << "Ex. time: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << " ms\n";

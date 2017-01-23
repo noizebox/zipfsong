@@ -59,11 +59,11 @@ void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_
     return;
 }
 
-void print_songs(const std::vector<Song>& song_list)
+void print_songs(const std::vector<Song>& song_list, int no_songs)
 {
-    for (std::vector<Song>::const_iterator i = song_list.begin(); i < song_list.end(); ++i)
+    for (int i = 0; i < no_songs; ++i)
     {
-        const char* name = i->name();
+        const char* name = song_list[i].name();
         while (*name != 0)
         {
             std::cout.put(*name++);
@@ -90,7 +90,7 @@ int main()
     std::vector<Song> song_list;
     parse_songs(no_songs, song_list, string_area, mem_size);
     stable_sort(song_list.begin(), song_list.end(), std::greater<Song>());
-    print_songs(song_list);
+    print_songs(song_list, no_outputs);
     delete string_area;
 
     std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
