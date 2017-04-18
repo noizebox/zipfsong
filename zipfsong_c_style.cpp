@@ -6,9 +6,6 @@
 // Solved by dumping the input from memory quickly and without processing.
 // Then interating through it in a raw c-like fashion. No strings are copied
 // so sorting is cheap. Not elegant in a c++11 way, but very fast.
-//
-// Now also prints by putting chars directly on cout and thus avoiding 
-// STL's slow stream handling.  
 //*******************************************
 #include <iostream>
 #include <vector>
@@ -63,12 +60,7 @@ void print_songs(const std::vector<Song>& song_list, int no_songs)
 {
     for (int i = 0; i < no_songs; ++i)
     {
-        const char* name = song_list[i].name();
-        while (*name != 0)
-        {
-            std::cout.put(*name++);
-        }
-        std::cout.put('\n');
+        std::cout << song_list[i].name() << '\n';
     }
     return;
 }
