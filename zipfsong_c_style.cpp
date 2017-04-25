@@ -13,6 +13,18 @@
 #include <functional>
 #include <chrono>
 
+/* Save a few cycles by replacing atoi() with a version that assumes positive integer and no characters in string */
+inline uint64_t unsafe_strtol(const char *c)
+{
+    uint64_t res{0};
+    while (*c != 0)
+    {
+        res = (res * 10) + (*c - '0');
+        ++c;
+    }
+    return res;
+}
+
 class Song
 {
 public:
@@ -45,7 +57,7 @@ void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_
         }
         else if (*c == '\n')
         {
-            int64_t listens = atol(plays);
+            int64_t listens = unsafe_strtol(plays);
             song_list.push_back(Song(title, listens * song_pos++));
             plays = c + 1;
             *c = 0;
