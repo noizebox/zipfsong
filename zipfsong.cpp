@@ -19,12 +19,13 @@ public:
     int64_t            rating() const {return _zipf_rating;} ;
     friend bool operator< (const Song& lhs, const Song& rhs){ return lhs._zipf_rating < rhs._zipf_rating; };
     friend bool operator> (const Song& lhs, const Song& rhs){ return rhs < lhs; };
+
 private:
     int64_t       _zipf_rating;
     std::string   _name;
 };
 
-void parse_songs(const int songs, std::vector<Song>& song_list)
+void parse_songs(int songs, std::vector<Song>& song_list)
 {
     song_list.reserve(songs);
     std::string input;
