@@ -21,8 +21,8 @@ public:
     friend bool operator> (const Song& lhs, const Song& rhs){ return rhs < lhs; };
 
 private:
-    int64_t       _zipf_rating;
     std::string   _name;
+    int64_t       _zipf_rating;
 };
 
 void parse_songs(int songs, std::vector<Song>& song_list)
@@ -52,7 +52,7 @@ int main()
 {
     std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
 
-    std::cin.sync_with_stdio (false);
+    std::ios::sync_with_stdio (false);
     std::string input;
     std::getline(std::cin, input);
     int pos = input.find(" ");
