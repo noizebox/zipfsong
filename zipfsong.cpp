@@ -29,12 +29,13 @@ void parse_songs(int songs, std::vector<Song>& song_list)
 {
     song_list.reserve(songs);
     std::string input;
+    input.reserve(100);
     for (int i = 1 ; i <= songs ; i++)
     {
         std::getline(std::cin, input);
         int pos = input.find(" ");
-        int64_t listens = atol(input.substr(0, pos).c_str());
-        song_list.push_back(Song(input.substr(pos + 1), listens * i));
+        int64_t listens = atol(input.substr(0, pos).data());
+        song_list.emplace_back(input.substr(pos + 1), listens * i);
     }
     return;
 }
