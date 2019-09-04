@@ -12,7 +12,7 @@
 class Song
 {
 public:
-    Song(const std::string& name, int64_t rating) : _name(name), _zipf_rating(rating) {} ;
+    Song(const std::string_view& name, int64_t rating) : _name(name), _zipf_rating(rating) {} ;
     ~Song() = default;
 
     const std::string& name() const {return _name;} ;
@@ -29,13 +29,12 @@ void parse_songs(int songs, std::vector<Song>& song_list)
 {
     song_list.reserve(songs);
     std::string input;
-    input.reserve(100);
     for (int i = 1 ; i <= songs ; i++)
     {
         std::getline(std::cin, input);
         int pos = input.find(" ");
-        int64_t listens = atol(input.substr(0, pos).data());
-        song_list.emplace_back(input.substr(pos + 1), listens * i);
+        int64_t listens = atol(input.substr(0, pos).c_str());
+        song_list.emplace_back(std::string_view(input).substr(pos + 1), listens * i);
     }
     return;
 }
