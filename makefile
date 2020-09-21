@@ -1,14 +1,14 @@
 CC=g++
 CPPFLAGS=-std=c++17 -O3 -Wall
 
-all: zipfsong zipfsong_c_style
+all: zipfsong zipfsong_cpp_fast
 
 zipfsong: zipfsong.cpp
 	$(CC) zipfsong.cpp $(CPPFLAGS) -o zipfsong
 
-zipfsong_c_style: zipfsong_c_style.cpp
-	$(CC) zipfsong_c_style.cpp $(CPPFLAGS) -o zipfsong_c_style
+zipfsong_cpp_fast: zipfsong_cpp_fast.cpp
+	$(CC) zipfsong_cpp_fast.cpp $(CPPFLAGS) -o zipfsong_cpp_fast
 
 clean:
 	rm ./zipfsong
-	rm ./zipfsong_c_style
+	rm ./zipfsong_cpp_fast

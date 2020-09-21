@@ -7,10 +7,10 @@ I have benchmarked my solutions against the other C++ and Python solutions I cou
 ### zipfsong.cpp
 This is a neat, by-the-book OOP solution using modern C++ features. Reasonably efficient, but the string handling drags it down a bit as there are many small heap allocations to process and string data is copied several times.
 
-### zipfsong_c_style.cpp
-In an attempt to make the processing as efficient as possible, I tried a less elegant, more old school C-like solution. This copies the input data directly to memory in one big chunk before doing any processing. It then uses C-strings that point into this memory to represent the names. This way the title strings are never copied and together with cutting a few corners in the string to integer conversion makes for very efficient processing. Though not as elegant as the OOP solution above.
+### zipfsong_cpp_fast.cpp
+A no holds barred kind of attempt at making the processing as efficient as possible, Originally written in a more old school C-style fashion which used char pointers to store the title strings, but eventually rewritten to use std::string_view instead. This solution copies the input data directly to memory in one big chunk before doing any processing. The title strings then point into this memory directly and the string data is never copied. 
 
-This solution manages to parse and sort 100000 songs in around 27 ms on an i7 laptop. In contrast, the oop solution above clocks in at around 56 ms at best, so about twice as fast.
+It also cuts a few corners in the string to integer conversion which makes for very efficient processing. Though not as elegant as the OOP solution above. This solution manages to parse and sort 100000 songs in around 27 ms on an i7 laptop. In contrast, the oop solution above clocks in at around 56 ms at best, so about twice as fast.
 
 ### gen_testdata.cpp
-I used this to generate 100000 random songs that I have used for benchmarking the solutions.
+Used to generate 100000 random songs that I have used for benchmarking the solutions.

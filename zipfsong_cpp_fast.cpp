@@ -1,26 +1,26 @@
 //*******************************************
 // Spotify puzzle #2 - Zipf's song
-// Gustav Andersson - 161206
+// Gustav Andersson - 200921
 // gustav.k.andersson@gmail.com
 //
-// Solved by dumping the input from memory quickly and without processing.
-// Then interating through it in a raw c-like fashion. No strings are copied
-// so sorting is cheap. Not elegant in a c++11 way, but very fast.
+// Solved by dumping the input from memory quickly and without processing. Don't copy
+// any string data, but use string_views that point into this memory (an improvement
+// over old c-style string)
 //*******************************************
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <functional>
 #include <chrono>
+#include <string_view>
 
-/* Save a few cycles by replacing atoi() with a version that assumes positive integer and no characters in string */
-inline uint64_t unsafe_strtol(const char *c)
+// Save a few cycles by replacing atoi() with a version that assumes positive integers and no characters in string
+inline uint64_t unsafe_strtol(const std::string_view& s)
 {
     uint64_t res{0};
-    while (*c != 0)
+    for (auto c : s)
     {
-        res = (res * 10) + (*c - '0');
-        ++c;
+        res = (res * 10) + (c - '0');
     }
     return res;
 }
@@ -28,14 +28,15 @@ inline uint64_t unsafe_strtol(const char *c)
 class Song
 {
 public:
-    Song(const char* name, int64_t rating) : _name(name), _zipf_rating(rating) {} ;
-    ~Song() = default;
-    const char* name() const {return _name;} ;
-    friend bool operator< (const Song& lhs, const Song& rhs){ return lhs._zipf_rating < rhs._zipf_rating; };
+    Song(std::string_view name, int64_t rating) : _name(name), _rating(rating) {}
+
+    const std::string_view& name() const { return _name; };
+    friend bool operator< (const Song& lhs, const Song& rhs){ return lhs._rating < rhs._rating; };
     friend bool operator> (const Song& lhs, const Song& rhs){ return rhs < lhs; };
+
 private:
-    const char*   _name;
-    int64_t       _zipf_rating;
+    std::string_view   _name;
+    int64_t            _rating;
 };
 
 void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_t mem_size)
@@ -43,28 +44,30 @@ void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_
     song_list.reserve(songs);
     std::cin.read(mem, mem_size);
 
-    char* c = mem;
-    char* plays = mem;
-    char* title = nullptr;
-    char* end = mem + mem_size;
+    const char* c = mem;
+    const char* end = mem + mem_size;
+    std::string_view plays;
     int song_pos = 1;
-    while (c < end && song_pos <= songs)
+    int str_len = 0;
+
+    while (song_pos <= songs && ++c < end)
     {
         if (*c == ' ')
         {
-            title = c + 1;
-            *c = 0;
+            plays = std::string_view(c - str_len, str_len);
+            str_len = 0;
+            ++c;
         }
         else if (*c == '\n')
         {
-            int64_t listens = unsafe_strtol(plays);
+            auto listens = unsafe_strtol(plays);
+            auto title = std::string_view(c - str_len, str_len);
             song_list.emplace_back(title, listens * song_pos++);
-            plays = c + 1;
-            *c = 0;
+            str_len = 0;
+            ++c;    
         }
-        ++c;
+        ++str_len;
     }
-    *--c = 0;
     return;
 }
 
@@ -84,11 +87,13 @@ int main()
     std::ios::sync_with_stdio (false);
     std::string input;
     std::getline(std::cin, input);
-    int pos = input.find(" ");
-    int no_songs = atoi(input.substr(0, pos).c_str());
-    int no_outputs = atoi(input.substr(pos + 1).c_str());
+    auto input_view = std::string_view(input); 
+    int pos = input_view.find(" ");
+    int no_songs = unsafe_strtol(input_view.substr(0, pos));
+    int no_outputs = unsafe_strtol(input_view.substr(pos + 1));
 
-    size_t mem_size = no_songs * 50; // max 30 chars per title and 20 chars for number of plays and whitespaces should be enough
+    // Assume max 30 chars per title and 20 chars for number of plays + whitespaces
+    size_t mem_size = no_songs * 50;
     char* string_area = static_cast<char*>(malloc(mem_size));
 
     std::vector<Song> song_list;
