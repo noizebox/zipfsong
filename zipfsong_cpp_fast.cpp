@@ -44,7 +44,7 @@ void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_
     song_list.reserve(songs);
     std::cin.read(mem, mem_size);
 
-    const char* c = mem;
+    const char* c = mem - 1;
     const char* end = mem + mem_size;
     std::string_view plays;
     int song_pos = 1;
@@ -61,7 +61,7 @@ void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_
         else if (*c == '\n')
         {
             auto listens = unsafe_strtol(plays);
-            auto title = std::string_view(c - str_len, str_len);
+            auto title = std::string_view(c - str_len, str_len + 1); // Make sure to include the newline so we don't need to add it back later
             song_list.emplace_back(title, listens * song_pos++);
             str_len = 0;
             ++c;    
@@ -73,10 +73,12 @@ void parse_songs(const int songs, std::vector<Song>& song_list, char* mem, size_
 
 void print_songs(const std::vector<Song>& song_list, int no_songs)
 {
+    std::string out;
     for (int i = 0; i < no_songs; ++i)
     {
-        std::cout << song_list[i].name() << '\n';
+        out.append(song_list[i].name());
     }
+    std::cout << out;
     return;
 }
 

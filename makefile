@@ -1,5 +1,5 @@
 CC=g++
-CPPFLAGS=-std=c++17 -O3 -Wall
+CPPFLAGS=-std=c++17 -O3 -Wall -ffast-math
 
 all: zipfsong zipfsong_cpp_fast
 
